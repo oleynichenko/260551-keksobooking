@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Александр Олейниченко](https://up.htmlacademy.ru/nodejs/1/user/260551).
-* Наставник: `Неизвестно`.
+* Студент: [Александр Олейниченко](https://up.htmlacademy.ru/nodejs/1/user/260551)
+* Наставник: `Артем Черкасов`.
 
 ---
 
