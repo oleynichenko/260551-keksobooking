@@ -20,15 +20,15 @@ switch (userCommand) {
     console.log(`Доступные команды: \n ${Command.HELP} — печатает этот текст; \n ${Command.VERSION} — печатает версию приложения;`);
     break;
 
-  case undefined:
+  case void 0:
     console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${Project.NAME}». \nАвтоp: ${Project.AUTHOR}.`);
     break;
 
   default:
     console.error(`Неизвестная команда "${userCommand}". \nЧтобы прочитать правила использования приложения, наберите "${Command.HELP}"`);
-    process.exitCode = 1;;
+    process.exitCode = 1;
 }
 
-process.on('exit', function(exitCode) {
+process.on(`exit`, function (exitCode) {
   console.log(`\nПриложение закончило работу с кодом выхода ${exitCode}`);
 });

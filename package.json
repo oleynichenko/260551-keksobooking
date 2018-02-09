@@ -1,0 +1,24 @@
+{
+  "name": "keksobooking",
+  "version": "0.0.1",
+  "description": "Learning project from HTMLAcademy",
+  "main": "index.js",
+  "scripts": {
+    "test:lint": "eslint .",
+    "test": "npm run test:lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oleynichenko/260551-keksobooking.git"
+  },
+  "author": "Oleynichenko Alexandr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oleynichenko/260551-keksobooking/issues"
+  },
+  "homepage": "https://github.com/oleynichenko/260551-keksobooking#readme",
+  "devDependencies": {
+    "eslint": "4.17.0",
+    "eslint-config-htmlacademy": "0.4.2"
+  }
+}
