@@ -10,6 +10,7 @@ Thumbs.db
 *.log
 npm-debug.log*
 node_modules/
+questions.txt
 
 # Папка с собранными файлами проекта
 build/
