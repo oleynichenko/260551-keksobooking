@@ -1,6 +1,6 @@
-const COMMAND_LINE_LENGHT = 15;
+const COMMAND_LINE_LENGTH = 15;
 
-function changeWordLenght(word, length) {
+function changeWordLength(word, length) {
   while (word.length < length) {
     word = word + ` `;
   }
@@ -10,8 +10,8 @@ function changeWordLenght(word, length) {
 
 function showCommands(commands) {
   for (const key in commands) {
-    if ({}.hasOwnProperty.call(commands, key)) {
-      const commandName = changeWordLenght(commands[key].name, COMMAND_LINE_LENGHT);
+    if (commands.hasOwnProperty(key)) {
+      const commandName = changeWordLength(commands[key].name, COMMAND_LINE_LENGTH);
 
       console.log(`${commandName} - ${commands[key].description}`);
     }

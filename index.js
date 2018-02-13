@@ -1,13 +1,13 @@
-const packageInfo = require(`../package.json`);
-const version = require(`./version`);
-const help = require(`./help`);
-const author = require(`./author`);
-const description = require(`./description`);
-const project = require(`./project`);
-const license = require(`./license`);
+const packageInfo = require(`./package.json`);
+const version = require(`./src/version`);
+const help = require(`./src/help`);
+const author = require(`./src/author`);
+const description = require(`./src/description`);
+const project = require(`./src/project`);
+const license = require(`./src/license`);
 
 function handleCommand(userText) {
-  const Command = {
+  const commands = {
     [help.name]: help,
     [version.name]: version,
     [license.name]: license,
@@ -16,17 +16,15 @@ function handleCommand(userText) {
     [description.name]: description
   };
 
-  let userCommand = Command[userText];
+  help.setCommands(commands);
+
+  let userCommand = commands[userText];
 
   if (typeof userCommand === `undefined`) {
     console.log(`Неизвестная команда "${userText}"`);
 
     userCommand = help;
     process.exitCode = 1;
-  }
-
-  if (userCommand.name === help.name) {
-    help.setCommands(Command);
   }
 
   userCommand.execute();
