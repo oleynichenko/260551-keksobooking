@@ -1,12 +1,29 @@
 const packageInfo = require(`./package.json`);
 const version = require(`./src/version`);
-const help = require(`./src/help`);
 const author = require(`./src/author`);
 const description = require(`./src/description`);
 const project = require(`./src/project`);
 const license = require(`./src/license`);
 
+
 function handleCommand(userText) {
+  const help = {
+    name: `--help`,
+    description: `печатает этот текст`,
+    execute() {
+      const COMMAND_LINE_LENGTH = 15;
+
+      console.log(`\nДоступные команды:`);
+      for (const key in commands) {
+        if (commands.hasOwnProperty(key)) {
+          const commandName = commands[key].name.padEnd(COMMAND_LINE_LENGTH);
+
+          console.log(`${commandName} - ${commands[key].description}`);
+        }
+      }
+    }
+  };
+
   const commands = {
     [help.name]: help,
     [version.name]: version,
@@ -15,8 +32,6 @@ function handleCommand(userText) {
     [project.name]: project,
     [description.name]: description
   };
-
-  help.setCommands(commands);
 
   let userCommand = commands[userText];
 
