@@ -1,32 +1,61 @@
-const argv = process.argv.slice(2);
-const userCommand = argv[0];
+const packageInfo = require(`./package.json`);
+const version = require(`./src/version`);
+const author = require(`./src/author`);
+const description = require(`./src/description`);
+const project = require(`./src/project`);
+const license = require(`./src/license`);
 
-const Project = {
-  NAME: `Keksobooking`,
-  AUTHOR: `Олейниченко Александр`
-};
 
-const Command = {
-  HELP: `--help`,
-  VERSION: `--version`
-};
+function handleCommand(userText) {
+  const help = {
+    name: `--help`,
+    description: `печатает этот текст`,
+    execute() {
+      const COMMAND_LINE_LENGTH = 15;
 
-switch (userCommand) {
-  case Command.VERSION:
-    console.log(`version 0.0.1`);
-    break;
+      console.log(`\nДоступные команды:`);
+      for (const key in commands) {
+        if (commands.hasOwnProperty(key)) {
+          const commandName = commands[key].name.padEnd(COMMAND_LINE_LENGTH);
 
-  case Command.HELP:
-    console.log(`Доступные команды: \n ${Command.HELP} — печатает этот текст; \n ${Command.VERSION} — печатает версию приложения;`);
-    break;
+          console.log(`${commandName} - ${commands[key].description}`);
+        }
+      }
+    }
+  };
 
-  case void 0:
-    console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${Project.NAME}». \nАвтоp: ${Project.AUTHOR}.`);
-    break;
+  const commands = {
+    [help.name]: help,
+    [version.name]: version,
+    [license.name]: license,
+    [author.name]: author,
+    [project.name]: project,
+    [description.name]: description
+  };
 
-  default:
-    console.error(`Неизвестная команда "${userCommand}". \nЧтобы прочитать правила использования приложения, наберите "${Command.HELP}"`);
+  let userCommand = commands[userText];
+
+  if (typeof userCommand === `undefined`) {
+    console.log(`Неизвестная команда "${userText}"`);
+
+    userCommand = help;
     process.exitCode = 1;
+  }
+
+  userCommand.execute();
+}
+
+function runProgram() {
+  console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${packageInfo.name}». \nАвтоp: ${packageInfo.author}.`);
+}
+
+const argv = process.argv.slice(2);
+const flag = argv[0];
+
+if (typeof flag === `undefined`) {
+  runProgram();
+} else {
+  handleCommand(flag);
 }
 
 process.on(`exit`, function (exitCode) {
