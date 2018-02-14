@@ -5,6 +5,7 @@ const description = require(`./src/description`);
 const project = require(`./src/project`);
 const license = require(`./src/license`);
 
+require(`colors`);
 
 function handleCommand(userText) {
   const help = {
@@ -18,7 +19,7 @@ function handleCommand(userText) {
         if (commands.hasOwnProperty(key)) {
           const commandName = commands[key].name.padEnd(COMMAND_LINE_LENGTH);
 
-          console.log(`${commandName} - ${commands[key].description}`);
+          console.log(`${commandName.grey} - ${commands[key].description.green}`);
         }
       }
     }
