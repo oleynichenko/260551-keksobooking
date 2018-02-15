@@ -5,6 +5,7 @@ const description = require(`./src/description`);
 const project = require(`./src/project`);
 const license = require(`./src/license`);
 const generate = require(`./src/generate`);
+const readline = require(`readline`);
 
 require(`colors`);
 
@@ -49,15 +50,41 @@ function handleCommand(userText) {
 }
 
 function runProgram() {
-  console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${packageInfo.name}». \nАвтоp: ${packageInfo.author}.`);
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${packageInfo.name}».`);
+
+  rl.question(`\nХотите сгенерировать данные? yes/no\n`, (answer) => {
+    if (answer === `yes`) {
+      const dataFromUser = {};
+
+      rl.question(`Введите желаемое количество мест проживания: `, (answer) => {
+        dataFromUser.placesQuantity = answer;
+
+        rl.question(`Укажите путь до файла в котором сохранить данные: `, (answer) => {
+          dataFromUser.filePath = answer;
+          rl.close();
+        });
+
+      });
+
+
+    } else {
+      rl.close();
+    }
+  });
 }
 
-const argv = process.argv.slice(2);
-const flag = argv[0];
 
 if (typeof flag === `undefined`) {
   runProgram();
 } else {
+  const argv = process.argv.slice(2);
+  const flag = argv[0];
+
   handleCommand(flag);
 }
 

@@ -1,15 +1,15 @@
-const {Places, Types, Time, Features, Photos} = require(`../data/entity-data`);
+const {PLACES, TYPES, TIME, FEATURES, PHOTOS, Price, Rooms, Guests, Location} = require(`../data/entity-data`);
 
 const namesGenerator = function* (names) {
   const namesList = names.slice();
 
   while (namesList.length > 0) {
-    const nameIndex = Math.floor(Math.random() * namesList.length);
+    const nameIndex = getRandomNumber(0, namesList.length - 1);
     yield namesList.splice(nameIndex, 1)[0];
   }
 };
 
-const getFeatures = () => Features.filter(() => Math.random() > 0.5);
+const getFeatures = () => FEATURES.filter(() => Math.random() > 0.5);
 
 const getRandomString = () => Math.random().toString(36).substr(2, 7);
 
@@ -23,11 +23,11 @@ const getRandomNumber = (min, max) => {
 
 const getRandomFromArr = (arr) => arr[Math.floor(arr.length * Math.random())];
 
-const places = namesGenerator(Places);
+const places = namesGenerator(PLACES);
 
 const generateEntity = () => [...places].map((place) => {
-  const xLocation = getRandomNumber(300, 900);
-  const yLocation = getRandomNumber(150, 500);
+  const xLocation = getRandomNumber(Location.X_MIN, Location.X_MAX);
+  const yLocation = getRandomNumber(Location.Y_MIN, Location.Y_MAX);
 
   return {
     author: {
@@ -36,16 +36,16 @@ const generateEntity = () => [...places].map((place) => {
 
     offer: {
       title: place,
-      adress: `${xLocation}, ${yLocation}`,
-      price: getRandomNumber(1000, 1000000),
-      type: getRandomFromArr(Types),
-      rooms: getRandomNumber(1, 5),
-      guests: getRandomNumber(1, 20),
-      checkin: getRandomFromArr(Time),
-      checkout: getRandomFromArr(Time),
+      address: `${xLocation}, ${yLocation}`,
+      price: getRandomNumber(Price.MIN, Price.MAX),
+      type: getRandomFromArr(TYPES),
+      rooms: getRandomNumber(Rooms.MIN, Rooms.MAX),
+      guests: getRandomNumber(Guests.MIN, Guests.MAX),
+      checkin: getRandomFromArr(TIME),
+      checkout: getRandomFromArr(TIME),
       features: getFeatures(),
       description: ``,
-      photos: mixArray(Photos)
+      photos: mixArray(PHOTOS)
     },
 
     location: {
