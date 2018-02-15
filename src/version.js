@@ -6,12 +6,11 @@ module.exports = {
   description: `версия программы`,
   execute() {
     const versionItems = packageInfo.version.split(`.`);
+    const colors = [`red`, `green`, `blue`];
 
-    versionItems[0] = versionItems[0].red;
-    versionItems[1] = versionItems[1].green;
-    versionItems[2] = versionItems[2].blue;
-
-    const coloredVersion = versionItems.join(`.`);
+    const coloredVersion = versionItems
+        .map((item, index) => item[colors[index]])
+        .join(`.`);
 
     console.log(`v${coloredVersion}`);
   }

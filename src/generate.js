@@ -1,6 +1,6 @@
-const {generate} = require(`../src/generator/entity-generator`);
+const {generateEntity} = require(`../src/generator/entity-generator`);
 
-const data = generate();
+const data = generateEntity();
 
 module.exports = {
   name: `--generate`,
