@@ -4,6 +4,7 @@ const author = require(`./src/author`);
 const description = require(`./src/description`);
 const project = require(`./src/project`);
 const license = require(`./src/license`);
+const generate = require(`./src/generate`);
 
 require(`colors`);
 
@@ -31,7 +32,8 @@ function handleCommand(userText) {
     [license.name]: license,
     [author.name]: author,
     [project.name]: project,
-    [description.name]: description
+    [description.name]: description,
+    [generate.name]: generate
   };
 
   let userCommand = commands[userText];
