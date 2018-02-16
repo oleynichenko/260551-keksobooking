@@ -47,6 +47,7 @@ function handleCommand(userText) {
   }
 
   userCommand.execute();
+  // .catch((err) => console.log(err.message));
 }
 
 function runProgram() {
@@ -55,13 +56,11 @@ function runProgram() {
     output: process.stdout
   });
 
-  console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${packageInfo.name}».`);
-
   rl.question(`\nХотите сгенерировать данные? yes/no\n`, (answer) => {
     if (answer === `yes`) {
       const dataFromUser = {};
 
-      rl.question(`Введите желаемое количество мест проживания: `, (answer) => {
+      rl.question(`Введите желаемое количество мест проживания от 1 до 8: `, (answer) => {
         dataFromUser.placesQuantity = answer;
 
         rl.question(`Укажите путь до файла в котором сохранить данные: `, (answer) => {
@@ -80,7 +79,8 @@ function runProgram() {
 
 
 if (typeof flag === `undefined`) {
-  runProgram();
+  console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${packageInfo.name}».`);
+  handleCommand(generate.name);
 } else {
   const argv = process.argv.slice(2);
   const flag = argv[0];

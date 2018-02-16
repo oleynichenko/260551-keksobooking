@@ -25,35 +25,37 @@ const getRandomFromArr = (arr) => arr[Math.floor(arr.length * Math.random())];
 
 const places = namesGenerator(PLACES);
 
-const generateEntity = () => [...places].map((place) => {
-  const xLocation = getRandomNumber(Location.X_MIN, Location.X_MAX);
-  const yLocation = getRandomNumber(Location.Y_MIN, Location.Y_MAX);
+const generateEntity = (quantity = PLACES.length) => {
+  const placesOnUserRequest = [...places].slice(0, quantity);
 
-  return {
-    author: {
-      avatar: `https://robohash.org/${getRandomString()}`
-    },
+  return placesOnUserRequest.map((place) => {
+    const xLocation = getRandomNumber(Location.X_MIN, Location.X_MAX);
+    const yLocation = getRandomNumber(Location.Y_MIN, Location.Y_MAX);
 
-    offer: {
-      title: place,
-      address: `${xLocation}, ${yLocation}`,
-      price: getRandomNumber(Price.MIN, Price.MAX),
-      type: getRandomFromArr(TYPES),
-      rooms: getRandomNumber(Rooms.MIN, Rooms.MAX),
-      guests: getRandomNumber(Guests.MIN, Guests.MAX),
-      checkin: getRandomFromArr(TIME),
-      checkout: getRandomFromArr(TIME),
-      features: getFeatures(),
-      description: ``,
-      photos: mixArray(PHOTOS)
-    },
-
-    location: {
-      x: xLocation,
-      y: yLocation
-    }
-  };
-});
+    return {
+      author: {
+        avatar: `https://robohash.org/${getRandomString()}`
+      },
+      offer: {
+        title: place,
+        address: `${xLocation}, ${yLocation}`,
+        price: getRandomNumber(Price.MIN, Price.MAX),
+        type: getRandomFromArr(TYPES),
+        rooms: getRandomNumber(Rooms.MIN, Rooms.MAX),
+        guests: getRandomNumber(Guests.MIN, Guests.MAX),
+        checkin: getRandomFromArr(TIME),
+        checkout: getRandomFromArr(TIME),
+        features: getFeatures(),
+        description: ``,
+        photos: mixArray(PHOTOS)
+      },
+      location: {
+        x: xLocation,
+        y: yLocation
+      }
+    };
+  });
+};
 
 module.exports = {
   generateEntity
