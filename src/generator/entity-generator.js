@@ -56,6 +56,38 @@ const generateEntity = (quantity = PLACES.length) => {
   });
 };
 
+const places = namesGenerator(PLACES);
+
+const generateEntity = () => [...places].map((place) => {
+  const xLocation = getRandomNumber(Location.X_MIN, Location.X_MAX);
+  const yLocation = getRandomNumber(Location.Y_MIN, Location.Y_MAX);
+
+  return {
+    author: {
+      avatar: `https://robohash.org/${getRandomString()}`
+    },
+
+    offer: {
+      title: place,
+      address: `${xLocation}, ${yLocation}`,
+      price: getRandomNumber(Price.MIN, Price.MAX),
+      type: getRandomFromArr(TYPES),
+      rooms: getRandomNumber(Rooms.MIN, Rooms.MAX),
+      guests: getRandomNumber(Guests.MIN, Guests.MAX),
+      checkin: getRandomFromArr(TIME),
+      checkout: getRandomFromArr(TIME),
+      features: getFeatures(),
+      description: ``,
+      photos: mixArray(PHOTOS)
+    },
+
+    location: {
+      x: xLocation,
+      y: yLocation
+    }
+  };
+});
+
 module.exports = {
   generateEntity
 };
