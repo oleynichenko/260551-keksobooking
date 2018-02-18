@@ -1,18 +1,26 @@
 const assert = require(`assert`);
 const generate = require(`../src/generate`);
+const fs = require(`fs`);
+const util = require(`util`);
+
+const access = util.promisify(fs.access);
+const unlink = util.promisify(fs.unlink);
 
 describe(`Generate JSON data`, function () {
-  it(`should fail on not existing folder`, function (done) {
-    const tempFileName = `${__dirname}/folder/testfile.json`;
+  it(`should fail on not existing folder`, () => {
+    const tempFilePath = `${__dirname}/folder/testfile.json`;
+    const placesQuantity = 1;
 
-    generate.execute(tempFileName, (err) => {
-      if (!err) {
-        assert.fail(`Path ${tempFileName} should not be available`);
-      }
-      done();
-    });
-    // return generate.execute(tempFileName, 1)
-    //     .then(() => assert.fail(`Path ${tempFileName} should not be available`))
-    //     .catch((e) => assert.ok(e));
+    return generate.execute(placesQuantity, tempFilePath)
+        .then(() => assert.fail(`Path ${tempFilePath} should not be available`))
+        .catch((err) => assert.ok(err));
+  });
+
+  it(`should create new file`, () => {
+    const testFilePath = `${__dirname}/testfile.json`;
+    generate.execute(1, testFilePath)
+        .then(() => access(testFilePath))
+        .then(() => unlink(testFilePath));
   });
 });
+

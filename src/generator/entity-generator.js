@@ -23,9 +23,8 @@ const getRandomNumber = (min, max) => {
 
 const getRandomFromArr = (arr) => arr[Math.floor(arr.length * Math.random())];
 
-const places = namesGenerator(PLACES);
-
 const generateEntity = (quantity = PLACES.length) => {
+  const places = namesGenerator(PLACES);
   const placesOnUserRequest = [...places].slice(0, quantity);
 
   return placesOnUserRequest.map((place) => {
