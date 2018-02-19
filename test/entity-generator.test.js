@@ -19,7 +19,7 @@ describe(`Random item from generated data should match the data model`, () => {
     });
 
     it(`"avatar" should contain "https://robohash.org/"`, () => {
-      assert.ok((randomPlace.author.avatar.startsWith(`https://robohash.org/`)), true);
+      assert.ok((randomPlace.author.avatar.startsWith(`https://robohash.org/`)));
     });
   });
 

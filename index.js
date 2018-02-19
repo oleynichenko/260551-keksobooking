@@ -5,6 +5,7 @@ const description = require(`./src/description`);
 const project = require(`./src/project`);
 const license = require(`./src/license`);
 const generate = require(`./src/generate`);
+const {setData} = require(`./src/set-data`);
 
 require(`colors`);
 
@@ -48,15 +49,12 @@ function handleCommand(userText) {
   userCommand.execute();
 }
 
-function runProgram() {
-  console.log(`Привет пользователь! \nЭта программа будет запускать сервер «${packageInfo.name}». \nАвтоp: ${packageInfo.author}.`);
-}
-
 const argv = process.argv.slice(2);
 const flag = argv[0];
 
 if (typeof flag === `undefined`) {
-  runProgram();
+  console.log(`Привет пользователь! \nЭта программа запускает сервер «${packageInfo.name}».`);
+  setData();
 } else {
   handleCommand(flag);
 }
