@@ -1,3 +1,4 @@
+const {PLACES} = require(`./data/entity-data`);
 const readline = require(`readline`);
 const fs = require(`fs`);
 const generate = require(`./generate`);
@@ -9,26 +10,34 @@ const Answer = {
   NO: `no`
 };
 
-
-const userSettings = {};
-
-const generateQuestion = `\nХотите сгенерировать данные? yes/no\n`;
-const wrongCommandMessage = `Неизвестная команда`.red;
-
-const placesQuestion = `Введите желаемое количество мест проживания от 1 до 8:\n`;
-const placesMessage = `Количество не соответствует диапазону`.red;
-const checkPlacesAnswer = (quantity) => {
-  return (quantity >= 1 && quantity <= 8);
+const Places = {
+  MIN: 1,
+  MAX: PLACES.length
 };
 
 const filePathDefault = `${process.cwd()}`;
-const filePathQuestion = `Укажите путь к файлу в папке проекта для сохранения данных:\n`;
-const filePathMessage = `Такого пути к файлу не существует.`.red;
+const userSettings = {};
 
-const rewritingQuestion = `Такой файл уже существует. Перезаписать? yes/no\n`.red;
+const Query = {
+  GENERATE: `\nХотите сгенерировать данные? ${Answer.YES}/${Answer.NO}\n`,
+  PLACES: `Введите количество мест проживания от ${Places.MIN} до ${Places.MAX}:\n`,
+  FILE_PATH: `Укажите путь к файлу в папке проекта для сохранения данных:\n`,
+  FILE_EXISTS: `Файл уже существует. Перезаписать? ${Answer.YES}/${Answer.NO}\n`
+};
+
+const Warning = {
+  COMMAND: `Неизвестная команда`.red,
+  PLACES: `Количество мест не соответствует диапазону`.red,
+  FILE_PATH: `Такого пути к файлу не существует.`.red,
+  DATA: `Данные не сгенерированы`.red
+};
+
+const checkPlacesAnswer = (quantity) => {
+  return (quantity >= Places.MIN && quantity <= Places.MAX);
+};
 
 const checkYesNoQuestion = (answer) => {
-  return (answer === Answer.YES || answer === Answer.NO) ? true : false;
+  return (answer === Answer.YES || answer === Answer.NO);
 };
 
 const checkFilePathAnswer = (path) => {
@@ -46,7 +55,7 @@ const confirmGeneration = (answer) => {
     if (answer === Answer.YES) {
       resolve();
     } else {
-      console.log(`Данные не сгенерированы`.red);
+      console.log(Warning.DATA);
       reject();
     }
   });
@@ -73,17 +82,18 @@ const setData = () => {
     });
   };
 
-  return getAnswer(generateQuestion, checkYesNoQuestion, wrongCommandMessage)
+  return getAnswer(Query.GENERATE, checkYesNoQuestion, Warning.COMMAND)
       .then((answer) => confirmGeneration(answer))
-      .then(() => getAnswer(placesQuestion, checkPlacesAnswer, placesMessage))
+      .then(() => getAnswer(Query.PLACES, checkPlacesAnswer, Warning.PLACES))
       .then((quantity) => {
         userSettings.placesQuantity = quantity;
       })
-      .then(() => getAnswer(filePathQuestion, checkFilePathAnswer, filePathMessage))
+      .then(() => getAnswer(Query.FILE_PATH, checkFilePathAnswer, Warning.FILE_PATH))
       .then((path) => {
         userSettings.filePath = `${filePathDefault}/${path}/${generate.fileName}`;
       })
-      .then(() => fs.existsSync(userSettings.filePath) ? getAnswer(rewritingQuestion, checkYesNoQuestion, wrongCommandMessage) : Answer.YES)
+      .then(() => fs.existsSync(userSettings.filePath) ?
+        getAnswer(Query.FILE_EXISTS, checkYesNoQuestion, Warning.COMMAND) : Answer.YES)
       .then((answer) => confirmGeneration(answer))
       .then(() => generate.execute(userSettings.placesQuantity, userSettings.filePath))
       .then(() => rl.close())
