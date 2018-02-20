@@ -57,8 +57,9 @@ if (typeof flag === `undefined`) {
   setData();
 } else {
   handleCommand(flag);
+  process.exit(1);
 }
 
-process.on(`exit`, function (exitCode) {
-  console.log(`\nПриложение закончило работу с кодом выхода ${exitCode}`);
-});
+// process.on(`exit`, function (exitCode) {
+//   console.log(`\nПриложение закончило работу с кодом выхода ${exitCode}`);
+// });
