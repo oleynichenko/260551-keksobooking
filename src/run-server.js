@@ -8,7 +8,7 @@ const readFile = promisify(fs.readFile);
 
 const LOCALHOST = `localhost`;
 
-const extensionToMIME = new Map([
+const extToMIME = new Map([
   [`.css`, `text/css`],
   [`.html`, `text/html; charset=UTF-8`],
   [`.jpg`, `image/jpeg`],
@@ -21,22 +21,26 @@ const pathToStatic = `${process.cwd()}/static`;
 const server = http.createServer((req, res) => {
   const absolutePath = pathToStatic + url.parse(req.url).pathname;
 
-  readFile(absolutePath)
-      .then((data) => {
-        const ext = path.extname(absolutePath);
-        const contentType = extensionToMIME.get(ext);
+  (async () => {
+    try {
+      const data = await readFile(absolutePath);
+      const extName = path.extname(absolutePath);
 
-        res.setHeader(`Content-Type`, contentType);
-        res.setHeader(`Content-length`, Buffer.byteLength(data));
+      res.setHeader(`Content-Type`, extToMIME.get(extName));
+      res.setHeader(`Content-length`, Buffer.byteLength(data));
 
-        res.end(data);
-      })
-      .catch(() => {
-        res.writeHead(404, `Not Found`);
-        res.end();
-      });
+      res.end(data);
+    } catch (err) {
+      res.writeHead(404, `Not Found`);
+      res.end(err.message);
+    }
+  })().catch((err) => {
+    res.statusCode = 500;
+    res.statusMessage = err.message;
+    res.setHeader(`Content-Type`, `text/plain`);
+    res.end(err.message);
+  });
 });
-
 
 module.exports = {
   run(port, hostname = LOCALHOST) {
