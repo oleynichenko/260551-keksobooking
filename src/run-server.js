@@ -1,9 +1,12 @@
 const http = require(`http`);
 const fs = require(`fs`);
+const {promisify} = require(`util`);
 const url = require(`url`);
 const path = require(`path`);
 
-const LOCAL_HOST = `localhost`;
+const readFile = promisify(fs.readFile);
+
+const LOCALHOST = `localhost`;
 
 const extensionToMIME = new Map([
   [`.css`, `text/css`],
@@ -13,31 +16,30 @@ const extensionToMIME = new Map([
   [`.ico`, `image/x-icon`]
 ]);
 
-
 const pathToStatic = `${process.cwd()}/static`;
 
 const server = http.createServer((req, res) => {
   const absolutePath = pathToStatic + url.parse(req.url).pathname;
 
-  fs.readFile(absolutePath, (err, data) => {
-    if (err) {
-      res.writeHead(404, `Not Found`);
-      res.end();
-    } else {
-      const ext = path.extname(absolutePath);
-      const contentType = extensionToMIME.get(ext);
+  readFile(absolutePath)
+      .then((data) => {
+        const ext = path.extname(absolutePath);
+        const contentType = extensionToMIME.get(ext);
 
-      res.setHeader(`Content-Type`, contentType);
-      res.setHeader(`content-length`, Buffer.byteLength(data));
+        res.setHeader(`Content-Type`, contentType);
+        res.setHeader(`Content-length`, Buffer.byteLength(data));
 
-      res.end(data);
-    }
-  });
+        res.end(data);
+      })
+      .catch(() => {
+        res.writeHead(404, `Not Found`);
+        res.end();
+      });
 });
 
 
 module.exports = {
-  run(port, hostname = LOCAL_HOST) {
+  run(port, hostname = LOCALHOST) {
     server.listen(port, hostname, (err) => {
       if (err) {
         return console.error(err.message);
