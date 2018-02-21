@@ -1,7 +1,7 @@
 const {PLACES} = require(`./data/entity-data`);
 const readline = require(`readline`);
 const fs = require(`fs`);
-const generate = require(`./generate`);
+const generate = require(`./cli/generate`);
 
 require(`colors`);
 
