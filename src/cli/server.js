@@ -21,15 +21,12 @@ module.exports = {
         rl.question(`Введите порт или нажмите ENTER для значения по умолчанию: `, (answer) => {
           answer = answer.trim();
 
-          if (answer >= Port.MIN && answer <= Port.MAX) {
-            rl.close();
-            resolve(answer);
-          } else if (answer === ``) {
-            rl.close();
-            resolve(Port.DEFAULT);
-          } else {
+          if (answer !== `` && (answer <= Port.MIN || answer >= Port.MAX)) {
             console.log(`Неверный номер порта`.red);
             resolve(getPort());
+          } else {
+            rl.close();
+            resolve(answer || Port.DEFAULT);
           }
         });
       });

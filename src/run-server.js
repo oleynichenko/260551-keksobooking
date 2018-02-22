@@ -4,7 +4,7 @@ const {promisify} = require(`util`);
 const url = require(`url`);
 const path = require(`path`);
 
-const readFile = promisify(fs.readFile);
+const readfile = promisify(fs.readFile);
 
 const LOCALHOST = `localhost`;
 
@@ -17,28 +17,40 @@ const extToMIME = new Map([
 ]);
 
 const pathToStatic = `${process.cwd()}/static`;
+const INDEX = `/index.html`;
+
+const sendError = (res, code, message) => {
+  res.statusCode = code;
+  res.statusMessage = message;
+  res.setHeader(`Content-Type`, `text/plain`);
+  res.end(message);
+};
+
+const getAbsolutePath = (address) => {
+  const pathName = url.parse(address).pathname;
+  return pathToStatic + ((pathName === `/`) ? INDEX : pathName);
+};
+
+const readFile = async (filePath, res) => {
+  const data = await readfile(filePath);
+  const extName = path.extname(filePath);
+
+  res.setHeader(`Content-Type`, extToMIME.get(extName));
+  res.setHeader(`Content-length`, Buffer.byteLength(data));
+  res.end(data);
+};
 
 const server = http.createServer((req, res) => {
-  const absolutePath = pathToStatic + url.parse(req.url).pathname;
+  const absolutePath = getAbsolutePath(req.url);
 
   (async () => {
     try {
-      const data = await readFile(absolutePath);
-      const extName = path.extname(absolutePath);
-
-      res.setHeader(`Content-Type`, extToMIME.get(extName));
-      res.setHeader(`Content-length`, Buffer.byteLength(data));
-
-      res.end(data);
+      await readFile(absolutePath, res);
     } catch (err) {
-      res.writeHead(404, `Not Found`);
-      res.end(err.message);
+      sendError(res, 404, `Not Found`);
     }
   })().catch((err) => {
-    res.statusCode = 500;
-    res.statusMessage = err.message;
-    res.setHeader(`Content-Type`, `text/plain`);
-    res.end(err.message);
+    sendError(res, 500, err.message);
   });
 });
 
