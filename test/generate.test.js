@@ -1,5 +1,5 @@
 const assert = require(`assert`);
-const generate = require(`../src/generate`);
+const generate = require(`../src/cli/generate`);
 const fs = require(`fs`);
 const util = require(`util`);
 
