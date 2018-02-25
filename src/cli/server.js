@@ -1,5 +1,5 @@
 const readline = require(`readline`);
-const server = require(`../run-server`);
+const server = require(`../server/run-server`);
 
 module.exports = {
   name: `--server`,

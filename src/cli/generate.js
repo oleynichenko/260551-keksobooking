@@ -12,7 +12,6 @@ module.exports = {
   execute(quantity, filePath = `${process.cwd()}/${this.fileName}`) {
     const data = generateEntity(quantity);
 
-    return writeFile(filePath, JSON.stringify(data), writeOptions)
-        .then(() => console.log(`Сгенерированные данные сохранены в файле ${this.fileName}`));
+    return writeFile(filePath, JSON.stringify(data), writeOptions);
   }
 };
