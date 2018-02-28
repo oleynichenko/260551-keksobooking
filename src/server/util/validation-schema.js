@@ -22,7 +22,7 @@ const isTimeFormat = () => {
     assert(time) {
       return /^(1?[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
     },
-    message: `format should be in format HH:mm`
+    message: `should be in format HH:mm`
   };
 };
 

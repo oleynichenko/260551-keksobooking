@@ -40,8 +40,8 @@ const PHOTOS = [
 ];
 
 const Price = {
-  MIN: 1000,
-  MAX: 1000000
+  MIN: 1,
+  MAX: 100000
 };
 
 const Rooms = {

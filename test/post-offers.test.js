@@ -1,21 +1,7 @@
 const request = require(`supertest`);
 const {TYPES, Price, Rooms} = require(`../src/data/entity-data`);
-const {app} = require(`../src/server/run-server`);
-const {TitleLength, ADDRESS_LENGTH} = require(`../src/server/validation-schema`);
-
-// const fields = {
-//   name,
-//   title,
-//   address,
-//   description,
-//   price,
-//   type,
-//   rooms,
-//   guests,
-//   checkin,
-//   checkout,
-//   features
-// };
+const {app} = require(`../src/server`);
+const {TitleLength, ADDRESS_LENGTH} = require(`../src/server/util/validation-schema`);
 
 const offer = {
   name: `Pavel`,
@@ -218,7 +204,7 @@ describe(`POST /api/offers`, () => {
         .expect(400, [{
           fieldName: `checkin`,
           fieldValue: incorrectOffer.checkin,
-          errorMessage: `format should be in format HH:mm`
+          errorMessage: `should be in format HH:mm`
         }]);
   });
 
@@ -240,7 +226,7 @@ describe(`POST /api/offers`, () => {
         .expect(400, [{
           fieldName: `checkout`,
           fieldValue: incorrectOffer.checkout,
-          errorMessage: `format should be in format HH:mm`
+          errorMessage: `should be in format HH:mm`
         }]);
   });
 

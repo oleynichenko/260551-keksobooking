@@ -1,5 +1,5 @@
 const {generateEntity} = require(`../../generator/entity-generator`);
-const ValidationError = require(`../errors/validation-error`);
+const ValidationError = require(`../util/validation-error`);
 const {schema: keksobookingSchema} = require(`../util/validation-schema`);
 const {validate} = require(`../util/validator`);
 
@@ -34,12 +34,14 @@ const saveOffer = (req, res) => {
   const data = req.body;
   const files = req.files;
 
-  if (files.avatar) {
-    data.avatar = files.avatar[0].mimetype;
-  }
+  if (files) {
+    if (files.avatar) {
+      data.avatar = files.avatar[0].mimetype;
+    }
 
-  if (files.preview) {
-    data.preview = files.preview[0].mimetype;
+    if (files.preview) {
+      data.preview = files.preview[0].mimetype;
+    }
   }
 
   const errors = validate(data, keksobookingSchema);
