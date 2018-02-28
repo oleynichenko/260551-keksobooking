@@ -1,4 +1,4 @@
-const {TYPES, Price, Rooms, FEATURES} = require(`../data/entity-data`);
+const {TYPES, Price, Rooms, FEATURES} = require(`../../data/entity-data`);
 
 const TitleLength = {
   MIN: 30,
