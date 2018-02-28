@@ -22,6 +22,8 @@ const TIME = [
   `14:00`
 ];
 
+const INITIAL_DATE = Date.parse(`2017-01-01`);
+
 const FEATURES = [
   `wifi`,
   `dishwasher`,
@@ -68,5 +70,6 @@ module.exports = {
   Price,
   Rooms,
   Guests,
-  Location
+  Location,
+  INITIAL_DATE
 };
