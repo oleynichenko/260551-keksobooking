@@ -1,9 +1,10 @@
 const express = require(`express`);
-const routes = require(`./routes`);
+const {offersRouter} = require(`./offers/route`);
 
 const app = express();
 
-routes.init(app);
+app.use(express.static(`static`));
+app.use(`/api/offers`, offersRouter);
 
 const run = (port, host) => {
   app.listen(port, host, (err) => {
