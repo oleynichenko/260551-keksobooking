@@ -1,4 +1,4 @@
-const {generateEntity} = require(`../generator/entity-generator`);
+const {generateOffers} = require(`../../test/generator/offers-generator`);
 const fs = require(`fs`);
 const util = require(`util`);
 

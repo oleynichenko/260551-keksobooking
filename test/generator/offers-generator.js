@@ -1,4 +1,5 @@
-const {PLACES, TYPES, TIME, FEATURES, PHOTOS, Price, Rooms, Guests, Location, INITIAL_DATE} = require(`../data/entity-data`);
+const {PLACES, TIME, PHOTOS, Guests, Location, INITIAL_DATE} = require(`../../src/server/util/const`);
+const {TYPES, FEATURES, Price, Rooms} = require(`./offers-data`);
 
 const namesGenerator = function* (names) {
   const namesList = names.slice();
@@ -31,7 +32,7 @@ const getRandomNumber = (min, max) => {
 
 const getRandomFromArr = (arr) => arr[Math.floor(arr.length * Math.random())];
 
-const generateEntity = (quantity = PLACES.length) => {
+const generateOffers = (quantity = PLACES.length) => {
   const dates = datesGenerator(INITIAL_DATE, PLACES.length);
 
   const places = namesGenerator(PLACES);
@@ -68,5 +69,5 @@ const generateEntity = (quantity = PLACES.length) => {
 };
 
 module.exports = {
-  generateEntity
+  generateOffers
 };

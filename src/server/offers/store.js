@@ -1,10 +1,11 @@
-const db = require(`../..database`);
+const db = require(`../../database`);
 
 const setupCollection = async () => {
-  const dbBase = await db;
+  const dBase = await db;
+  const collection = dBase.collection(`offers`);
 
-  const collection = dbBase.collection(`offers`);
-  collection.createIndex({date: -1});
+  // collection.createIndex({date: -1});
+
   return collection;
 };
 
@@ -26,4 +27,7 @@ class OfferStore {
   }
 }
 
-module.exports = new OfferStore(setupCollection().catch((error) => console.error(`Failed to set up "wizards"-collection`, error)));
+const collection = setupCollection()
+    .catch((error) => console.error(`Failed to set up "offers"-collection`, error));
+
+module.exports = new OfferStore(collection);
