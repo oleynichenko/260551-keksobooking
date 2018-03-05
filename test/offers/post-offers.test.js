@@ -19,8 +19,6 @@ const offer = {
   features: `elevator, conditioner`
 };
 
-// const offerWithAvatar = Object.assign({}, offer, {avatar: `image/jpeg`});
-
 const incorrectOffer = {
   name: ``,
   title: `Маленькая квартирка`,

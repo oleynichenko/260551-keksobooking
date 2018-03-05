@@ -31,8 +31,7 @@ const validateField = (data, fieldName, {required = false, converter = DEFAULT_C
   try {
     if (exists(fieldValue)) {
       const value = converter(fieldValue);
-      // console.log(fieldName);
-      // console.log(value);
+
       for (const assertion of assertions) {
         if (!assertion.assert(value)) {
           errors.push(printError(fieldName, fieldValue, assertion.message));
