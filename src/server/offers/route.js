@@ -28,72 +28,83 @@ const _toPage = async (cursor, skip = 0, limit = 20) => {
     limit,
     total: await cursor.count()
   };
-}
+};
 
 const async = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 offersRouter.use(bodyParser.json());
 
 offersRouter.get(`/`, async(async (req, res) => {
-  const data = await _toPage(await offersRouter.offerStore.getAllOffers());
+  const query = req.query;
+  let skip;
+  let limit;
+
+  if (query.skip) {
+    skip = query.skip;
+  }
+
+  if (query.limit) {
+    limit = query.limit;
+  }
+
+  const data = await _toPage(await offersRouter.offerStore.getAllOffers(), skip, limit);
   res.send(data);
 }));
 
 offersRouter.post(`/`, cpUpload, async(async (req, res) => {
-    const data = req.body;
-    const files = req.files;
+  const data = Object.assign({}, req.body);
+  const files = req.files;
 
-    if (files) {
-      if (files.avatar) {
-        data.avatar = files.avatar[0].mimetype;
-      }
-
-      if (files.preview) {
-        data.preview = files.preview[0].mimetype;
-      }
+  if (files) {
+    if (files.avatar) {
+      data.avatar = files.avatar[0].mimetype;
     }
 
-    const errors = validate(data, keksobookingSchema);
+    if (files.preview) {
+      data.preview = files.preview[0].mimetype;
+    }
+  }
 
-    if (errors.length > 0) {
-      throw new ValidationError(errors);
+  const errors = validate(data, keksobookingSchema);
+
+  if (errors.length > 0) {
+    throw new ValidationError(errors);
+  }
+
+  data.date = Date.now();
+
+  if (files) {
+    if (files.avatar) {
+      const avatar = files.avatar[0];
+
+      const avatarInfo = {
+        path: `/api/offers/${data.date}/avatar`,
+        mimetype: avatar.mimetype
+      };
+
+      await offersRouter.imageStore.save(avatarInfo.path, createStreamFromBuffer(avatar.buffer));
+      data.avatar = avatarInfo;
     }
 
-    data.date = Date.now();
+    if (files.preview) {
+      const preview = files.preview[0];
 
-    if (files) {
-      if (files.avatar) {
-        const avatar = files.avatar[0];
+      const previewInfo = {
+        path: `/api/offers/${data.date}/preview`,
+        mimetype: preview.mimetype
+      };
 
-        const avatarInfo = {
-          path: `/api/offers/${data.date}/avatar`,
-          mimetype: avatar.mimetype
-        };
-
-        await offersRouter.imageStore.save(avatarInfo.path, createStreamFromBuffer(avatar.buffer));
-        data.avatar = avatarInfo;
-      }
-
-      if (files.preview) {
-        const preview = files.preview[0];
-
-        const previewInfo = {
-          path: `/api/offers/${data.date}/preview`,
-          mimetype: preview.mimetype
-        };
-
-        await offersRouter.imageStore.save(previewInfo.path, createStreamFromBuffer(preview.buffer));
-        data.preview = previewInfo;
-      }
+      await offersRouter.imageStore.save(previewInfo.path, createStreamFromBuffer(preview.buffer));
+      data.preview = previewInfo;
     }
+  }
 
-    await offersRouter.offerStore.save(data);
-    res.send(data);
+  await offersRouter.offerStore.save(data);
+  res.send(req.body);
 }));
 
 offersRouter.get(`/:date`, async(async (req, res) => {
-  const offersDate = +req.params.date;
-  // const offer = offers.find((it) => it.date === date);
+  const offersDate = parseInt(req.params.date, 10);
   const foundOffer = await offersRouter.offerStore.getOffer(offersDate);
 
   if (!foundOffer) {
@@ -104,7 +115,7 @@ offersRouter.get(`/:date`, async(async (req, res) => {
 }));
 
 offersRouter.get(`/:date/avatar`, async(async (req, res) => {
-  const offersDate = +req.params.date;
+  const offersDate = parseInt(req.params.date, 10);
 
   const foundOffer = await offersRouter.offerStore.getOffer(offersDate);
 
@@ -140,7 +151,7 @@ offersRouter.use((exception, req, res, next) => {
 
   if (exception instanceof NotFoundError) {
     data = exception.errorMessage;
-    statusCode = 404
+    statusCode = 404;
   }
 
   res.status(statusCode).send(data);

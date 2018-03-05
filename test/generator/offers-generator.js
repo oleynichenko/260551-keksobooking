@@ -1,5 +1,5 @@
-const {PLACES, TIME, PHOTOS, Guests, Location, INITIAL_DATE} = require(`../../src/server/util/const`);
-const {TYPES, FEATURES, Price, Rooms} = require(`./offers-data`);
+const {PLACES, TIME, PHOTOS, Guests, Location, INITIAL_DATE} = require(`./offers-data`);
+const {TYPES, FEATURES, Price, Rooms} = require(`../../src/server/util/const`);
 
 const namesGenerator = function* (names) {
   const namesList = names.slice();
