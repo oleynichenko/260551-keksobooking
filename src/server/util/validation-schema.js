@@ -44,7 +44,6 @@ const oneOf = (choices) => {
 const anyOf = (choices) => {
   return {
     assert(options) {
-      // console.log(options);
       const assertion = oneOf(choices);
       return options.every((it) => assertion.assert(it));
     },
