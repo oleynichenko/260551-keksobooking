@@ -1,17 +1,12 @@
 const {Router} = require(`express`);
 const bodyParser = require(`body-parser`);
 const multer = require(`multer`);
-// const offerStore = require(`./store`);
-// const imageStore = require(`../images/store`);
 
 const ValidationError = require(`../util/validation-error`);
 const NotFoundError = require(`../util/not-found-error`);
 const {schema: keksobookingSchema} = require(`../util/validation-schema`);
 const {validate} = require(`../util/validator`);
 const createStreamFromBuffer = require(`../util/buffer-to-stream`);
-// const Controller = require(`./controllers`);
-
-// const controller = new Controller(offerStore, imageStore);
 
 const offersRouter = new Router();
 const upload = multer({storage: multer.memoryStorage()});
