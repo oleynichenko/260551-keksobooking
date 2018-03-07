@@ -1,6 +1,7 @@
 const {MongoClient} = require(`mongodb`);
 
-const url = `mongodb://localhost:27017`;
+const DB_HOST = process.env.DB_HOST || `localhost:27017`;
+const url = `mongodb://${DB_HOST}`;
 
 module.exports = MongoClient.connect(url)
     .then((client) => {
