@@ -1,11 +1,23 @@
 const express = require(`express`);
-const routes = require(`./routes`);
+const getOfferStore = require(`./offers/store`);
+const imageStore = require(`./images/store`);
+const createOffersRouter = require(`./offers/route`);
 
-const app = express();
+const createServer = async () => {
+  const offerStore = await getOfferStore();
+  const offersRouter = createOffersRouter(offerStore, imageStore);
 
-routes.init(app);
+  const server = express();
 
-const run = (port, host) => {
+  server.use(express.static(`static`));
+  server.use(`/api/offers`, offersRouter);
+
+  return server;
+};
+
+const run = async (port, host) => {
+  const app = await createServer();
+
   app.listen(port, host, (err) => {
     if (err) {
       return console.error(err.message);
@@ -15,6 +27,5 @@ const run = (port, host) => {
 };
 
 module.exports = {
-  run,
-  app
+  run
 };

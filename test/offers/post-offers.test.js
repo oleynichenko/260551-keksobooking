@@ -1,7 +1,9 @@
 const request = require(`supertest`);
-const {TYPES, Price, Rooms} = require(`../src/data/entity-data`);
-const {app} = require(`../src/server`);
-const {TitleLength, ADDRESS_LENGTH} = require(`../src/server/util/validation-schema`);
+const {TYPES, Price, Rooms, ADDRESS_LENGTH, TitleLength} = require(`../../src/server/util/const`);
+const app = require(`express`)();
+const mockOffersRouter = require(`./mock-offers-router`);
+
+app.use(`/api/offers`, mockOffersRouter);
 
 const offer = {
   name: `Pavel`,
@@ -16,8 +18,6 @@ const offer = {
   checkout: `7:00`,
   features: `elevator, conditioner`
 };
-
-const offerWithAvatar = Object.assign({}, offer, {avatar: `image/jpeg`});
 
 const incorrectOffer = {
   name: ``,
@@ -73,7 +73,7 @@ describe(`POST /api/offers`, () => {
         .field(`checkout`, `7:00`)
         .field(`features`, `elevator, conditioner`)
         .attach(`avatar`, `test/fixtures/keks.jpg`)
-        .expect(200, offerWithAvatar);
+        .expect(200, offer);
   });
 
   it(`should fail if 'title' is invalid`, () => {

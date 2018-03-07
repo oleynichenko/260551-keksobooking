@@ -9,28 +9,10 @@ const PLACES = [
   `Неуютное бунгало по колено в воде`
 ];
 
-const TYPES = [
-  `flat`,
-  `palace`,
-  `house`,
-  `bungalo`
-];
-
 const TIME = [
   `12:00`,
   `13:00`,
   `14:00`
-];
-
-const INITIAL_DATE = Date.parse(`2017-01-01`);
-
-const FEATURES = [
-  `wifi`,
-  `dishwasher`,
-  `parking`,
-  `washer`,
-  `elevator`,
-  `conditioner`
 ];
 
 const PHOTOS = [
@@ -38,16 +20,6 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
-
-const Price = {
-  MIN: 1,
-  MAX: 100000
-};
-
-const Rooms = {
-  MIN: 1,
-  MAX: 5
-};
 
 const Guests = {
   MIN: 1,
@@ -61,14 +33,12 @@ const Location = {
   Y_MAX: 500,
 };
 
+const INITIAL_DATE = Date.parse(`2017-01-01`);
+
 module.exports = {
   PLACES,
-  TYPES,
   TIME,
-  FEATURES,
   PHOTOS,
-  Price,
-  Rooms,
   Guests,
   Location,
   INITIAL_DATE

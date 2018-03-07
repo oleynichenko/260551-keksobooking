@@ -1,4 +1,4 @@
-const {generateEntity} = require(`../generator/entity-generator`);
+const {generateOffers} = require(`../../test/generator/offers-generator`);
 const fs = require(`fs`);
 const util = require(`util`);
 
@@ -10,7 +10,7 @@ module.exports = {
   description: `генерирует данные для программы`,
   fileName: `places-data.json`,
   execute(quantity, filePath = `${process.cwd()}/${this.fileName}`) {
-    const data = generateEntity(quantity);
+    const data = generateOffers(quantity);
 
     return writeFile(filePath, JSON.stringify(data), writeOptions);
   }

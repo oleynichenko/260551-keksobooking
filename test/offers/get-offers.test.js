@@ -1,7 +1,10 @@
 const request = require(`supertest`);
 const assert = require(`assert`);
-const {PLACES, INITIAL_DATE} = require(`../src/data/entity-data`);
-const {app} = require(`../src/server`);
+const {PLACES, INITIAL_DATE} = require(`../generator/offers-data`);
+const mockOffersRouter = require(`./mock-offers-router`);
+const app = require(`express`)();
+
+app.use(`/api/offers`, mockOffersRouter);
 
 describe(`GET /api/offers`, () => {
   it(`respond with JSON`, () => {

@@ -1,4 +1,4 @@
-const {PLACES} = require(`./data/entity-data`);
+const {PLACES} = require(`../test/generator/offers-data`);
 const readline = require(`readline`);
 const fs = require(`fs`);
 const generate = require(`./cli/generate`);

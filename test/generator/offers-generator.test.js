@@ -1,9 +1,10 @@
 const assert = require(`assert`);
-const {PLACES, TYPES, TIME, FEATURES, PHOTOS, Price, Rooms, Guests, Location} = require(`../src/data/entity-data`);
-const {generateEntity} = require(`../src/generator/entity-generator`);
+const {TYPES, FEATURES, Price, Rooms} = require(`../../src/server/util/const`);
+const {PLACES, TIME, PHOTOS, Guests, Location} = require(`./offers-data`);
+const {generateOffers} = require(`./offers-generator`);
 
-const data = generateEntity();
-const randomPlace = data[Math.floor(Math.random() * data.length)];
+const data = generateOffers();
+const randomOffer = data[Math.floor(Math.random() * data.length)];
 
 describe(`Generate data`, () => {
   it(`should generate data for all Places`, () => {
@@ -11,20 +12,20 @@ describe(`Generate data`, () => {
   });
 });
 
-describe(`Random item from generated data should match the data model`, () => {
+describe(`Random offer from generated data should match the data model`, () => {
 
   describe(`Author`, () => {
     it(`"avatar" should exist with String value`, () => {
-      assert.equal(typeof randomPlace.author.avatar, `string`);
+      assert.equal(typeof randomOffer.author.avatar, `string`);
     });
 
     it(`"avatar" should contain "https://robohash.org/"`, () => {
-      assert.ok((randomPlace.author.avatar.startsWith(`https://robohash.org/`)));
+      assert.ok((randomOffer.author.avatar.startsWith(`https://robohash.org/`)));
     });
   });
 
   describe(`Offer`, () => {
-    const offer = randomPlace.offer;
+    const offer = randomOffer.offer;
 
     it(`"title" should be one of PLACES data`, () => {
       assert.ok(PLACES.includes(offer.title));
@@ -69,11 +70,11 @@ describe(`Random item from generated data should match the data model`, () => {
 
   describe(`Location`, () => {
     it(`"location x" should be between ${Location.X_MIN} and ${Location.X_MAX}`, () => {
-      assert.ok(randomPlace.location.x >= Location.X_MIN && randomPlace.location.x <= Location.X_MAX);
+      assert.ok(randomOffer.location.x >= Location.X_MIN && randomOffer.location.x <= Location.X_MAX);
     });
 
     it(`"location y" should be between ${Location.Y_MIN} and ${Location.Y_MAX}`, () => {
-      assert.ok(randomPlace.location.y >= Location.Y_MIN && randomPlace.location.y <= Location.Y_MAX);
+      assert.ok(randomOffer.location.y >= Location.Y_MIN && randomOffer.location.y <= Location.Y_MAX);
     });
   });
 });

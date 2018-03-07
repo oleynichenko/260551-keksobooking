@@ -1,11 +1,4 @@
-const {TYPES, Price, Rooms, FEATURES} = require(`../../data/entity-data`);
-
-const TitleLength = {
-  MIN: 30,
-  MAX: 140
-};
-
-const ADDRESS_LENGTH = 100;
+const {TYPES, Price, Rooms, FEATURES, TitleLength, ADDRESS_LENGTH} = require(`./const`);
 
 const unique = () => {
   return {
@@ -51,7 +44,6 @@ const oneOf = (choices) => {
 const anyOf = (choices) => {
   return {
     assert(options) {
-      // console.log(options);
       const assertion = oneOf(choices);
       return options.every((it) => assertion.assert(it));
     },
@@ -165,8 +157,6 @@ const schema = {
 };
 
 module.exports = {
-  schema,
-  TitleLength,
-  ADDRESS_LENGTH
+  schema
 };
 
