@@ -1,4 +1,4 @@
-const logger = require(`../../winston`);
+const logger = require(`../winston`);
 const express = require(`express`);
 const getOfferStore = require(`./offers/store`);
 const getController = require(`./offers/controller`);

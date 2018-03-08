@@ -1,4 +1,4 @@
-const logger = require(`../../../winston`);
+const logger = require(`../../winston`);
 const ValidationError = require(`../util/validation-error`);
 const NotFoundError = require(`../util/not-found-error`);
 const {schema: keksobookingSchema} = require(`../util/validation-schema`);

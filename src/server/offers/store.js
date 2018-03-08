@@ -1,4 +1,4 @@
-const logger = require(`../../../winston`);
+const logger = require(`../../winston`);
 const getConnection = require(`../../database`);
 
 const setupCollection = async () => {
