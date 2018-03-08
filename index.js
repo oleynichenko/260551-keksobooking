@@ -1,4 +1,4 @@
-require('dotenv').config();
+require(`dotenv`).config();
 const packageInfo = require(`./package.json`);
 const {handleCommand} = require(`./src/cli`);
 const {setData} = require(`./src/set-data`);

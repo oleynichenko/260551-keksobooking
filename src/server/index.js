@@ -1,3 +1,4 @@
+const logger = require(`../../../winston`);
 const express = require(`express`);
 const offerStore = require(`./offers/store`);
 const imageStore = require(`./images/store`);
@@ -11,9 +12,9 @@ app.use(`/api/offers`, offersRouter);
 const run = (port, host) => {
   app.listen(port, host, (err) => {
     if (err) {
-      return console.error(err.message);
+      return logger.error(`Ошибка при запуске сервера`, err.message);
     }
-    return console.log(`Сервер запущен на http://${host}:${port}`);
+    return logger.info(`Сервер запущен на http://${host}:${port}`);
   });
 };
 

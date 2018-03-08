@@ -1,3 +1,5 @@
+const logger = require(`../../../winston`);
+
 module.exports = class NotFoundError extends Error {
   constructor(reason) {
     super();
