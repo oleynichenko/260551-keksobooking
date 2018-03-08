@@ -6,11 +6,19 @@ const DB_NAME = process.env.DB_NAME || `keksobooking`;
 
 const url = `mongodb://${DB_HOST}`;
 
-module.exports = MongoClient.connect(url)
-    .then((client) => {
-      return client.db(DB_NAME);
-    })
-    .catch((error) => {
-      logger.error(`Failed to connect to MongoDB`, error);
-      process.exit(1);
-    });
+let connection;
+
+module.exports = async () => {
+  if (!connection) {
+    connection = await MongoClient.connect(url)
+        .then((client) => {
+          return client.db(`keksobooking`);
+        })
+        .catch((error) => {
+          console.log(`Failed to connect to MongoDB`, error);
+          process.exit(1);
+        });
+  }
+
+  return connection;
+};

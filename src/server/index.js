@@ -1,15 +1,24 @@
 const logger = require(`../../../winston`);
 const express = require(`express`);
-const offerStore = require(`./offers/store`);
+const getOfferStore = require(`./offers/store`);
 const imageStore = require(`./images/store`);
-const offersRouter = require(`./offers/route`)(offerStore, imageStore);
+const createOffersRouter = require(`./offers/route`);
 
-const app = express();
+const createServer = async () => {
+  const offerStore = await getOfferStore();
+  const offersRouter = createOffersRouter(offerStore, imageStore);
 
-app.use(express.static(`static`));
-app.use(`/api/offers`, offersRouter);
+  const server = express();
 
-const run = (port, host) => {
+  server.use(express.static(`static`));
+  server.use(`/api/offers`, offersRouter);
+
+  return server;
+};
+
+const run = async (port, host) => {
+  const app = await createServer();
+
   app.listen(port, host, (err) => {
     if (err) {
       return logger.error(`Ошибка при запуске сервера`, err.message);
@@ -19,6 +28,5 @@ const run = (port, host) => {
 };
 
 module.exports = {
-  run,
-  app
+  run
 };
