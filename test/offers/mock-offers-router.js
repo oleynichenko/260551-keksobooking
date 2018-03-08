@@ -1,4 +1,5 @@
-const createOffersRouter = require(`../../src/server/offers/route`);
+const getRouter = require(`../../src/server/offers/route`);
+const getController = require(`../../src/server/offers/controller`);
 const {generateOffers} = require(`../generator/offers-generator`);
 
 const offers = generateOffers();
@@ -53,4 +54,6 @@ class MockImageStore {
   }
 }
 
-module.exports = createOffersRouter(new MockOffersStore(), new MockImageStore());
+const controller = getController(new MockOffersStore(), new MockImageStore());
+
+module.exports = getRouter(controller);

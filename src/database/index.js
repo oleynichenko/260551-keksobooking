@@ -12,10 +12,10 @@ module.exports = async () => {
   if (!connection) {
     connection = await MongoClient.connect(url)
         .then((client) => {
-          return client.db(`keksobooking`);
+          return client.db(DB_NAME);
         })
         .catch((error) => {
-          console.log(`Failed to connect to MongoDB`, error);
+          logger.error(`Failed to connect to MongoDB`, error);
           process.exit(1);
         });
   }

@@ -1,12 +1,14 @@
-const logger = require(`../../../winston`);
+const logger = require(`../../winston`);
 const express = require(`express`);
 const getOfferStore = require(`./offers/store`);
+const getController = require(`./offers/controller`);
 const imageStore = require(`./images/store`);
-const createOffersRouter = require(`./offers/route`);
+const getRouter = require(`./offers/route`);
 
 const createServer = async () => {
   const offerStore = await getOfferStore();
-  const offersRouter = createOffersRouter(offerStore, imageStore);
+  const controller = getController(offerStore, imageStore);
+  const offersRouter = getRouter(controller);
 
   const server = express();
 
