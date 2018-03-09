@@ -2,6 +2,7 @@ const logger = require(`../../winston`);
 const ValidationError = require(`../util/validation-error`);
 const NotFoundError = require(`../util/not-found-error`);
 const {schema: keksobookingSchema} = require(`../util/validation-schema`);
+const customize = require(`../util/customize`);
 const {validate} = require(`../util/validator`);
 const createStreamFromBuffer = require(`../util/buffer-to-stream`);
 
@@ -33,8 +34,10 @@ const getController = (offerStore, imageStore) => {
   };
 
   const postOffer = async (req, res) => {
-    const data = Object.assign({}, req.body);
+    const data = req.body;
     const files = req.files;
+
+    logger.info(`received POST data: `, data);
 
     if (files) {
       if (files.avatar) {
@@ -64,24 +67,36 @@ const getController = (offerStore, imageStore) => {
         };
 
         await imageStore.save(avatarInfo.path, createStreamFromBuffer(avatar.buffer));
-        data.avatar = avatarInfo;
+        data.avatar = avatarInfo.path;
       }
 
       if (files.preview) {
-        const preview = files.preview[0];
+        const previewFiles = files.preview;
+        data.preview = [];
 
-        const previewInfo = {
-          path: `/api/offers/${data.date}/preview`,
-          mimetype: preview.mimetype
-        };
+        previewFiles.forEach(async (file, index) => {
+          const filePath = `/api/offers/${data.date}/preview${index}`;
 
-        await imageStore.save(previewInfo.path, createStreamFromBuffer(preview.buffer));
-        data.preview = previewInfo;
+          await imageStore.save(filePath, createStreamFromBuffer(file.buffer));
+
+          data.preview.push(filePath);
+
+          // const preview = files.preview[0];
+          // const previewInfo = {
+          //   path: `/api/offers/${data.date}/preview${index}`,
+          //   mimetype: file.mimetype
+          // };
+
+          // await imageStore.save(previewInfo.path, createStreamFromBuffer(preview.buffer));
+          // data.preview = previewInfo;
+        });
       }
     }
 
-    await offerStore.save(data);
-    res.send(req.body);
+    const customizedData = customize(data);
+
+    await offerStore.save(customizedData);
+    res.send(data);
   };
 
   const getOfferByDate = async (req, res) => {
@@ -116,7 +131,7 @@ const getController = (offerStore, imageStore) => {
       throw new NotFoundError(`File was not found`);
     }
 
-    res.set(`content-type`, avatar.mimetype);
+    // res.set(`content-type`, avatar.mimetype);
     res.set(`content-length`, info.length);
     res.status(200);
     stream.pipe(res);

@@ -1,5 +1,6 @@
 const {PLACES, TIME, PHOTOS, Guests, Location, INITIAL_DATE} = require(`./offers-data`);
 const {TYPES, FEATURES, Price, Rooms} = require(`../../src/server/util/const`);
+const {getRandomFromArr, getRandomString, mixArray, getRandomNumber} = require(`../../src/server/util/help-functions`);
 
 const namesGenerator = function* (names) {
   const namesList = names.slice();
@@ -19,18 +20,6 @@ const datesGenerator = function* (initialDate, quantity) {
 };
 
 const getFeatures = () => FEATURES.filter(() => Math.random() > 0.5);
-
-const getRandomString = () => Math.random().toString(36).substr(2, 7);
-
-const mixArray = (arr) => {
-  return arr.slice().sort((a, b) => Math.random() > 0.5 ? a - b : b - a);
-};
-
-const getRandomNumber = (min, max) => {
-  return min + Math.floor(Math.random() * (max + 1 - min));
-};
-
-const getRandomFromArr = (arr) => arr[Math.floor(arr.length * Math.random())];
 
 const generateOffers = (quantity = PLACES.length) => {
   const dates = datesGenerator(INITIAL_DATE, PLACES.length);

@@ -6,7 +6,7 @@ const upload = multer({storage: multer.memoryStorage()});
 
 const cpUpload = upload.fields([
   {name: `avatar`, maxCount: 1},
-  {name: `preview`, maxCount: 1}
+  {name: `preview`, maxCount: 10}
 ]);
 
 const offersRouter = new Router();

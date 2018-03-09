@@ -1,3 +1,13 @@
+const NAMES = [
+  `Keks`,
+  `Pavel`,
+  `Nikolay`,
+  `Alex`,
+  `Ulyana`,
+  `Anastasyia`,
+  `Julia`
+];
+
 const TYPES = [
   `flat`,
   `palace`,
@@ -32,6 +42,7 @@ const TitleLength = {
 const ADDRESS_LENGTH = 100;
 
 module.exports = {
+  NAMES,
   TYPES,
   FEATURES,
   Price,

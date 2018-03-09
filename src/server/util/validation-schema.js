@@ -129,14 +129,23 @@ const schema = {
   },
   features: {
     required: false,
-    converter(val) {
-      return val.split(`, `);
-    },
     assertions: [
       unique(), anyOf(FEATURES)
     ]
   },
   name: {
+    required: false,
+    converter(val) {
+      return val.trim();
+    }
+  },
+  capacity: {
+    required: false,
+    converter(val) {
+      return val.trim();
+    }
+  },
+  description: {
     required: false,
     converter(val) {
       return val.trim();
