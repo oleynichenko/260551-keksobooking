@@ -1,5 +1,6 @@
 const logger = require(`../../winston`);
 const getConnection = require(`../../database`);
+const {OffersQuery} = require(`../util/const`);
 
 const setupCollection = async () => {
   const dBase = await getConnection();
@@ -19,12 +20,16 @@ class OfferStore {
     return (await this.collection).findOne({date});
   }
 
-  async getAllOffers() {
-    return (await this.collection).find();
+  async getOffers(skip = OffersQuery.SKIP, limit = OffersQuery.LIMIT) {
+    return (await this.collection).find().skip(skip).limit(limit).toArray();
   }
 
   async save(offerData) {
     return (await this.collection).insertOne(offerData);
+  }
+
+  async count() {
+    return (await this.collection).count();
   }
 }
 

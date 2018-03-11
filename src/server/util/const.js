@@ -1,3 +1,8 @@
+const OffersQuery = {
+  SKIP: 0,
+  LIMIT: 20
+};
+
 const TYPES = [
   `flat`,
   `palace`,
@@ -37,5 +42,6 @@ module.exports = {
   Price,
   Rooms,
   TitleLength,
-  ADDRESS_LENGTH
+  ADDRESS_LENGTH,
+  OffersQuery
 };

@@ -1,34 +1,30 @@
-const logger = require(`../../winston`);
-const ValidationError = require(`../util/validation-error`);
-const NotFoundError = require(`../util/not-found-error`);
 const {schema: keksobookingSchema} = require(`../util/validation-schema`);
 const {validate} = require(`../util/validator`);
 const createStreamFromBuffer = require(`../util/buffer-to-stream`);
+const ValidationError = require(`../error/validation-error`);
+const NotFoundError = require(`../error/not-found-error`);
 
 const getController = (offerStore, imageStore) => {
-  const _toPage = async (cursor, skip = 0, limit = 20) => {
-    return {
-      data: await (cursor.skip(skip).limit(limit).toArray()),
-      skip,
-      limit,
-      total: await cursor.count()
-    };
-  };
-
   const getOffers = async (req, res) => {
     const query = req.query;
     let skip;
     let limit;
 
     if (query.skip) {
-      skip = query.skip;
+      skip = parseInt(query.skip, 10);
     }
 
     if (query.limit) {
-      limit = query.limit;
+      limit = parseInt(query.limit, 10);
     }
 
-    const data = await _toPage(await offerStore.getAllOffers(), skip, limit);
+    const data = {
+      data: await offerStore.getOffers(skip, limit),
+      skip,
+      limit,
+      total: await offerStore.count()
+    };
+
     res.send(data);
   };
 
@@ -122,30 +118,11 @@ const getController = (offerStore, imageStore) => {
     stream.pipe(res);
   };
 
-  const handleErrors = (exception, req, res, next) => {
-    let data = exception;
-    let statusCode = 400;
-
-    if (exception instanceof ValidationError) {
-      data = exception.errors;
-    }
-
-    if (exception instanceof NotFoundError) {
-      data = exception.errorMessage;
-      statusCode = 404;
-    }
-
-    logger.error(`Ошибка обработки запросов`, data);
-    res.status(statusCode).send(data);
-    next();
-  };
-
   return {
     getOffers,
     postOffer,
     getOfferByDate,
-    getAvatar,
-    handleErrors
+    getAvatar
   };
 };
 

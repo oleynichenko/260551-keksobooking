@@ -14,6 +14,7 @@ describe(`GET /api/offers`, () => {
         .expect(`Content-Type`, /json/)
         .then((response) => {
           const page = response.body;
+
           assert.equal(page.total, PLACES.length);
           assert.equal(Object.keys(page.data[0]).length, 4);
         });
