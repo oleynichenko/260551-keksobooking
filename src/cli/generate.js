@@ -12,6 +12,7 @@ module.exports = {
   execute(quantity, filePath = `${process.cwd()}/${this.fileName}`) {
     const data = generateOffers(quantity);
 
-    return writeFile(filePath, JSON.stringify(data), writeOptions);
+    return writeFile(filePath, JSON.stringify(data), writeOptions)
+        .then(() => console.log(`Данные успешно сохранены в файле ${filePath}`));
   }
 };

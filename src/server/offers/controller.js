@@ -22,11 +22,11 @@ const getController = (offerStore, imageStore) => {
     let limit;
 
     if (query.skip) {
-      skip = query.skip;
+      skip = parseInt(query.skip, 10);
     }
 
     if (query.limit) {
-      limit = query.limit;
+      limit = parseInt(query.limit, 10);
     }
 
     const data = await _toPage(await offerStore.getAllOffers(), skip, limit);
