@@ -5,6 +5,7 @@ const project = require(`./cli/project`);
 const license = require(`./cli/license`);
 const generate = require(`./cli/generate`);
 const server = require(`./cli/server`);
+const fill = require(`./cli/fill`);
 
 require(`colors`);
 
@@ -34,7 +35,8 @@ function handleCommand(userText) {
     [project.name]: project,
     [description.name]: description,
     [generate.name]: generate,
-    [server.name]: server
+    [server.name]: server,
+    [fill.name]: fill
   };
 
   let userCommand = commands[userText];

@@ -1,5 +1,5 @@
 const {PLACES, TIME, PHOTOS, Guests, Location, INITIAL_DATE} = require(`./offers-data`);
-const {TYPES, FEATURES, Price, Rooms} = require(`../../src/server/util/const`);
+const {TYPES, FEATURES, Price, Rooms, NAMES} = require(`../../src/server/util/const`);
 const {getRandomFromArr, getRandomString, mixArray, getRandomNumber} = require(`../../src/server/util/help-functions`);
 
 const namesGenerator = function* (names) {
@@ -33,6 +33,7 @@ const generateOffers = (quantity = PLACES.length) => {
 
     return {
       author: {
+        name: getRandomFromArr(NAMES),
         avatar: `https://robohash.org/${getRandomString()}`
       },
       offer: {

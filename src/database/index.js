@@ -7,11 +7,13 @@ const DB_NAME = process.env.DB_NAME || `keksobooking`;
 const url = `mongodb://${DB_HOST}`;
 
 let connection;
+let dbClient;
 
-module.exports = async () => {
+const getConnection = async () => {
   if (!connection) {
     connection = await MongoClient.connect(url)
         .then((client) => {
+          dbClient = client;
           return client.db(DB_NAME);
         })
         .catch((error) => {
@@ -21,4 +23,17 @@ module.exports = async () => {
   }
 
   return connection;
+};
+
+const closeMongoClient = () => {
+  if (!dbClient) {
+    logger.warn(`Попытка закрыть неподключенное соединение к базе`);
+  } else {
+    dbClient.close();
+  }
+};
+
+module.exports = {
+  getConnection,
+  closeMongoClient
 };

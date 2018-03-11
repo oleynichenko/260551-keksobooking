@@ -1,5 +1,5 @@
 const logger = require(`../../winston`);
-const getConnection = require(`../../database`);
+const {getConnection} = require(`../../database`);
 
 const setupCollection = async () => {
   const dBase = await getConnection();
@@ -25,6 +25,10 @@ class OfferStore {
 
   async save(offerData) {
     return (await this.collection).insertOne(offerData);
+  }
+
+  async saveMany(offers) {
+    return (await this.collection).insertMany(offers);
   }
 }
 
