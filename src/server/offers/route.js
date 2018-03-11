@@ -1,6 +1,7 @@
 const {Router} = require(`express`);
 const bodyParser = require(`body-parser`);
 const multer = require(`multer`);
+const handleErrors = require(`../error/handle-errors`);
 
 const upload = multer({storage: multer.memoryStorage()});
 
@@ -25,7 +26,7 @@ const getRouter = (controller) => {
   offersRouter.post(`/`, cpUpload, async(controller.postOffer));
   offersRouter.get(`/:date`, async(controller.getOfferByDate));
   offersRouter.get(`/:date/aoffersRouterar`, async(controller.getAvatar));
-  offersRouter.use(controller.handleErrors);
+  offersRouter.use(handleErrors);
 
   return offersRouter;
 };

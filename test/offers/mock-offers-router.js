@@ -1,6 +1,7 @@
 const getRouter = require(`../../src/server/offers/route`);
 const getController = require(`../../src/server/offers/controller`);
 const {generateOffers} = require(`../generator/offers-generator`);
+const {OffersQuery} = require(`../../src/server/util/const`);
 
 const offers = generateOffers();
 
@@ -34,11 +35,15 @@ class MockOffersStore {
     return offers.find((it) => it.date === date);
   }
 
-  async getAllOffers() {
-    return new Cursor(offers);
+  async getOffers(skip = OffersQuery.SKIP, limit = OffersQuery.LIMIT) {
+    return new Cursor(offers).skip(skip).limit(limit).toArray();
   }
 
   async save() {
+  }
+
+  async count() {
+    return new Cursor(offers).count();
   }
 }
 
