@@ -1,4 +1,4 @@
-const db = require(`../../database`);
+const getConnection = require(`../../database`);
 const mongodb = require(`mongodb`);
 
 class ImageStore {
@@ -7,7 +7,7 @@ class ImageStore {
       return this._bucket;
     }
 
-    const dBase = await db;
+    const dBase = await getConnection();
 
     if (!this._bucket) {
       this._bucket = new mongodb.GridFSBucket(dBase, {
@@ -38,6 +38,5 @@ class ImageStore {
     });
   }
 }
-
 
 module.exports = new ImageStore();

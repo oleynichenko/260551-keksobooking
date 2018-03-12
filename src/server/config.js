@@ -3,7 +3,7 @@ const readline = require(`readline`);
 const Port = {
   MIN: 1024,
   MAX: 49151,
-  DEFAULT: 3000
+  DEFAULT: parseInt(process.env.SERVER_PORT, 10) || 3000
 };
 
 const isNumeric = (number) => {
@@ -39,5 +39,5 @@ const setPort = async () => {
 
 module.exports = {
   setPort,
-  hostname: `localhost`
+  hostname: process.env.SERVER_HOST || `localhost`
 };
