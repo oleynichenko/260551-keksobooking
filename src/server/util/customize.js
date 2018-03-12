@@ -1,6 +1,6 @@
 const schema = require(`./validation-schema`);
 
-const customize = (data) => {
+const customize = (data, date) => {
   const location = data.address.split(`, `);
 
   return {
@@ -25,7 +25,7 @@ const customize = (data) => {
       x: parseInt(location[0], 10),
       y: parseInt(location[1], 10),
     },
-    date: data.date
+    date
   };
 };
 

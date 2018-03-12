@@ -56,10 +56,10 @@ const getController = (offerStore, imageStore) => {
       throw new ValidationError(errors);
     }
 
-    data.date = Date.now();
+    const date = Date.now();
 
     if (avatar) {
-      const avatarPath = `/api/offers/${data.date}/avatar`;
+      const avatarPath = `/api/offers/${date}/avatar`;
 
       await imageStore.save(avatarPath, avatar.mimetype, createStreamFromBuffer(avatar.buffer));
 
@@ -70,7 +70,7 @@ const getController = (offerStore, imageStore) => {
       let photosPaths = [];
 
       for (let i = 0; i < photos.length; i++) {
-        const photoPath = `/api/offers/${data.date}/photo${i}`;
+        const photoPath = `/api/offers/${date}/photo${i}`;
 
         await imageStore.save(photoPath, photos[i].mimetype, createStreamFromBuffer(photos[i].buffer));
 
@@ -80,7 +80,7 @@ const getController = (offerStore, imageStore) => {
       data.photos = photosPaths;
     }
 
-    const customizedData = customize(data);
+    const customizedData = customize(data, date);
 
     await offerStore.save(customizedData);
     res.status(200);
