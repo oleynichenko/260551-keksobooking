@@ -1,73 +1,6 @@
-const {TYPES, Price, Rooms, FEATURES, TitleLength, ADDRESS_LENGTH} = require(`./const`);
-
-const unique = () => {
-  return {
-    assert(options) {
-      const set = new Set(options);
-      return set.size === options.length;
-    },
-    message: `should contain unique items`
-  };
-};
-
-const isTimeFormat = () => {
-  return {
-    assert(time) {
-      return /^(1?[0-9]|2[0-3]):[0-5][0-9]$/.test(time);
-    },
-    message: `should be in format HH:mm`
-  };
-};
-
-const isNumeric = (number) => {
-  return !isNaN(parseFloat(number)) && isFinite(number);
-};
-
-const inRange = (from, to) => {
-  return {
-    assert(number) {
-      return isNumeric(number) && number >= from && number <= to;
-    },
-    message: `should be in range ${from}..${to}`
-  };
-};
-
-const oneOf = (choices) => {
-  return {
-    assert(option) {
-      return choices.indexOf(option) >= 0;
-    },
-    message: `should be one of [${choices}]`
-  };
-};
-
-const anyOf = (choices) => {
-  return {
-    assert(options) {
-      const assertion = oneOf(choices);
-      return options.every((it) => assertion.assert(it));
-    },
-    message: `should contain items from [${choices}]`
-  };
-};
-
-const isImage = () => {
-  return {
-    assert(mimetype) {
-      return mimetype.startsWith(`image/`);
-    },
-    message: `should be an image`
-  };
-};
-
-const textRange = (from, to) => {
-  return {
-    assert(text) {
-      return text.length >= from && text.length <= to;
-    },
-    message: `text length should be in range ${from}..${to}`
-  };
-};
+const {TYPES, Price, Rooms, FEATURES, TitleLength, ADDRESS_LENGTH, Guests, NAMES} = require(`./const`);
+const {getRandomFromArr} = require(`./help-functions`);
+const {unique, isTimeFormat, inRange, oneOf, anyOf, isImage, allImages, textRange} = require(`./assertions`);
 
 const schema = {
   title: {
@@ -90,6 +23,9 @@ const schema = {
   },
   price: {
     required: true,
+    converter(val) {
+      return Number(val);
+    },
     assertions: [
       inRange(Price.MIN, Price.MAX)
     ]
@@ -123,49 +59,62 @@ const schema = {
   },
   rooms: {
     required: true,
+    converter(val) {
+      return Number(val);
+    },
     assertions: [
       inRange(Rooms.MIN, Rooms.MAX)
     ]
   },
   features: {
     required: false,
+    converter(val = []) {
+      return Array.isArray(val) ? val : [val];
+    },
     assertions: [
       unique(), anyOf(FEATURES)
     ]
   },
   name: {
     required: false,
-    converter(val) {
+    converter(val = getRandomFromArr(NAMES)) {
       return val.trim();
     }
   },
   capacity: {
     required: false,
     converter(val) {
-      return val.trim();
-    }
+      return Number(val);
+    },
+    assertions: [
+      inRange(Guests.MIN, Guests.MAX)
+    ]
   },
   description: {
     required: false,
-    converter(val) {
+    converter(val = ``) {
       return val.trim();
     }
   },
   avatar: {
     required: false,
+    converter(val = ``) {
+      return val;
+    },
     assertions: [
       isImage()
     ]
   },
-  preview: {
+  photos: {
     required: false,
+    converter(val = []) {
+      return val;
+    },
     assertions: [
-      isImage()
+      allImages()
     ]
   },
 };
 
-module.exports = {
-  schema
-};
+module.exports = schema;
 

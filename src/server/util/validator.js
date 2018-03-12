@@ -60,6 +60,4 @@ const validate = (data, schema) => {
   return errors;
 };
 
-module.exports = {
-  validate
-};
+module.exports = validate;

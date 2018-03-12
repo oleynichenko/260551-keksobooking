@@ -25,7 +25,7 @@ const getRouter = (controller) => {
   offersRouter.get(`/`, async(controller.getOffers));
   offersRouter.post(`/`, cpUpload, async(controller.postOffer));
   offersRouter.get(`/:date`, async(controller.getOfferByDate));
-  offersRouter.get(`/:date/aoffersRouterar`, async(controller.getAvatar));
+  offersRouter.get(`/:date/avatar`, async(controller.getAvatar));
   offersRouter.use(handleErrors);
 
   return offersRouter;

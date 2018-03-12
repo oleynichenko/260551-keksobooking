@@ -13,6 +13,11 @@ const OffersQuery = {
   LIMIT: 20
 };
 
+const Guests = {
+  MIN: 0,
+  MAX: 50
+};
+
 const TYPES = [
   `flat`,
   `palace`,
@@ -49,6 +54,7 @@ const ADDRESS_LENGTH = 100;
 module.exports = {
   NAMES,
   TYPES,
+  Guests,
   FEATURES,
   Price,
   Rooms,
