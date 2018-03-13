@@ -1,3 +1,4 @@
+const logger = require(`./winston`);
 const version = require(`./cli/version`);
 const author = require(`./cli/author`);
 const description = require(`./cli/description`);
@@ -48,9 +49,14 @@ function handleCommand(userText) {
     process.exitCode = 1;
   }
 
-  userCommand.execute();
+  const promise = userCommand.execute();
+
+  if (promise instanceof Promise) {
+    promise.catch((error) => {
+      logger.error(`Ошибка при работе комманды ${userCommand}`, error.message);
+      process.exit(1);
+    });
+  }
 }
 
-module.exports = {
-  handleCommand
-};
+module.exports = handleCommand;

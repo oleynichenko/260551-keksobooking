@@ -11,6 +11,7 @@ const cpUpload = upload.fields([
 ]);
 
 const offersRouter = new Router();
+
 offersRouter.use(bodyParser.json());
 
 offersRouter.use((req, res, next) => {

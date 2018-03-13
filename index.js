@@ -1,6 +1,6 @@
 require(`dotenv`).config();
 const packageInfo = require(`./package.json`);
-const {handleCommand} = require(`./src/cli`);
+const handleCommand = require(`./src/cli`);
 const setData = require(`./src/set-data`);
 
 const argv = process.argv.slice(2);

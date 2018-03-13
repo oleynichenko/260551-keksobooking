@@ -12,12 +12,12 @@ module.exports = (exception, req, res, next) => {
 
   if (exception instanceof ValidationError) {
     data = exception.errors;
-    statusCode = 400;
+    statusCode = exception.code;
   }
 
   if (exception instanceof NotFoundError) {
     data = exception.errorMessage;
-    statusCode = 404;
+    statusCode = exception.code;
   }
 
   logger.error(`Ошибка обработки запросов`, exception);
