@@ -1,12 +1,11 @@
 const logger = require(`../../winston`);
-const getConnection = require(`../../database`);
-const {OffersQuery} = require(`../util/const`);
+const {getConnection} = require(`../../database`);
 
 const setupCollection = async () => {
   const dBase = await getConnection();
   const collection = dBase.collection(`offers`);
 
-  // collection.createIndex({date: -1});
+  collection.createIndex({date: -1}, {unique: true});
 
   return collection;
 };
@@ -20,12 +19,16 @@ class OfferStore {
     return (await this.collection).findOne({date});
   }
 
-  async getOffers(skip = OffersQuery.SKIP, limit = OffersQuery.LIMIT) {
+  async getOffers(skip, limit) {
     return (await this.collection).find().skip(skip).limit(limit).toArray();
   }
 
   async save(offerData) {
     return (await this.collection).insertOne(offerData);
+  }
+
+  async saveMany(offers) {
+    return (await this.collection).insertMany(offers);
   }
 
   async count() {

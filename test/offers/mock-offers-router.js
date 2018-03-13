@@ -1,7 +1,6 @@
 const getRouter = require(`../../src/server/offers/route`);
 const getController = require(`../../src/server/offers/controller`);
 const {generateOffers} = require(`../generator/offers-generator`);
-const {OffersQuery} = require(`../../src/server/util/const`);
 
 const offers = generateOffers();
 
@@ -35,7 +34,7 @@ class MockOffersStore {
     return offers.find((it) => it.date === date);
   }
 
-  async getOffers(skip = OffersQuery.SKIP, limit = OffersQuery.LIMIT) {
+  async getOffers(skip, limit) {
     return new Cursor(offers).skip(skip).limit(limit).toArray();
   }
 

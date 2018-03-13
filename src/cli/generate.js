@@ -7,11 +7,14 @@ const writeOptions = {encoding: `utf-8`, mode: 0o644};
 
 module.exports = {
   name: `--generate`,
-  description: `генерирует данные для программы`,
+  description: `сохраняет в файл тестовые данные для программы`,
   fileName: `places-data.json`,
   execute(quantity, filePath = `${process.cwd()}/${this.fileName}`) {
     const data = generateOffers(quantity);
 
-    return writeFile(filePath, JSON.stringify(data), writeOptions);
+    console.log(`Данные сохраняются..`);
+
+    return writeFile(filePath, JSON.stringify(data), writeOptions)
+        .then(() => console.log(`Данные успешно сохранены в файле ${filePath}`));
   }
 };

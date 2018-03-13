@@ -90,7 +90,9 @@ const setData = () => {
       })
       .then(() => getAnswer(Query.FILE_PATH, checkFilePathAnswer, Warning.FILE_PATH))
       .then((path) => {
-        userSettings.filePath = `${filePathDefault}/${path}/${generate.fileName}`;
+        const userPath = (path) ? `\\${path}\\` : `\\`;
+
+        userSettings.filePath = `${filePathDefault}${userPath}${generate.fileName}`;
       })
       .then(() => fs.existsSync(userSettings.filePath) ?
         getAnswer(Query.FILE_EXISTS, checkYesNoQuestion, Warning.COMMAND) : Answer.YES)
@@ -100,7 +102,5 @@ const setData = () => {
       .catch(() => rl.close());
 };
 
-module.exports = {
-  setData
-};
+module.exports = setData;
 

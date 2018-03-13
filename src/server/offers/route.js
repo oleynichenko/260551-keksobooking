@@ -7,10 +7,11 @@ const upload = multer({storage: multer.memoryStorage()});
 
 const cpUpload = upload.fields([
   {name: `avatar`, maxCount: 1},
-  {name: `preview`, maxCount: 1}
+  {name: `preview`, maxCount: 10}
 ]);
 
 const offersRouter = new Router();
+
 offersRouter.use(bodyParser.json());
 
 offersRouter.use((req, res, next) => {
@@ -25,7 +26,7 @@ const getRouter = (controller) => {
   offersRouter.get(`/`, async(controller.getOffers));
   offersRouter.post(`/`, cpUpload, async(controller.postOffer));
   offersRouter.get(`/:date`, async(controller.getOfferByDate));
-  offersRouter.get(`/:date/aoffersRouterar`, async(controller.getAvatar));
+  offersRouter.get(`/:date/avatar`, async(controller.getAvatar));
   offersRouter.use(handleErrors);
 
   return offersRouter;

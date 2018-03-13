@@ -1,14 +1,17 @@
-const {schema: keksobookingSchema} = require(`../util/validation-schema`);
-const {validate} = require(`../util/validator`);
+const schema = require(`../util/validation-schema`);
+const customize = require(`../util/customize`);
+const validate = require(`../util/validator`);
 const createStreamFromBuffer = require(`../util/buffer-to-stream`);
 const ValidationError = require(`../error/validation-error`);
 const NotFoundError = require(`../error/not-found-error`);
+const {OffersQuery} = require(`../util/const`);
 
 const getController = (offerStore, imageStore) => {
   const getOffers = async (req, res) => {
     const query = req.query;
-    let skip;
-    let limit;
+
+    let skip = OffersQuery.SKIP;
+    let limit = OffersQuery.LIMIT;
 
     if (query.skip) {
       skip = parseInt(query.skip, 10);
@@ -25,59 +28,63 @@ const getController = (offerStore, imageStore) => {
       total: await offerStore.count()
     };
 
+    res.status(200);
     res.send(data);
   };
 
   const postOffer = async (req, res) => {
-    const data = Object.assign({}, req.body);
+    const data = req.body;
     const files = req.files;
+    let avatar;
+    let photos;
 
     if (files) {
       if (files.avatar) {
-        data.avatar = files.avatar[0].mimetype;
+        avatar = files.avatar[0];
+        data.avatar = avatar.mimetype;
       }
 
       if (files.preview) {
-        data.preview = files.preview[0].mimetype;
+        photos = files.preview;
+        data.photos = photos.map((file) => file.mimetype);
       }
     }
 
-    const errors = validate(data, keksobookingSchema);
+    const errors = validate(data, schema);
 
     if (errors.length > 0) {
       throw new ValidationError(errors);
     }
 
-    data.date = Date.now();
+    const date = Date.now();
 
-    if (files) {
-      if (files.avatar) {
-        const avatar = files.avatar[0];
+    if (avatar) {
+      const avatarPath = `/api/offers/${date}/avatar`;
 
-        const avatarInfo = {
-          path: `/api/offers/${data.date}/avatar`,
-          mimetype: avatar.mimetype
-        };
+      await imageStore.save(avatarPath, avatar.mimetype, createStreamFromBuffer(avatar.buffer));
 
-        await imageStore.save(avatarInfo.path, createStreamFromBuffer(avatar.buffer));
-        data.avatar = avatarInfo;
-      }
-
-      if (files.preview) {
-        const preview = files.preview[0];
-
-        const previewInfo = {
-          path: `/api/offers/${data.date}/preview`,
-          mimetype: preview.mimetype
-        };
-
-        await imageStore.save(previewInfo.path, createStreamFromBuffer(preview.buffer));
-        data.preview = previewInfo;
-      }
+      data.avatar = avatarPath;
     }
 
-    await offerStore.save(data);
-    res.send(req.body);
+    if (photos) {
+      let photosPaths = [];
+
+      for (let i = 0; i < photos.length; i++) {
+        const photoPath = `/api/offers/${date}/photo${i}`;
+
+        await imageStore.save(photoPath, photos[i].mimetype, createStreamFromBuffer(photos[i].buffer));
+
+        photosPaths.push(photoPath);
+      }
+
+      data.photos = photosPaths;
+    }
+
+    const customizedData = customize(data, date);
+
+    await offerStore.save(customizedData);
+    res.status(200);
+    res.send(data);
   };
 
   const getOfferByDate = async (req, res) => {
@@ -88,6 +95,7 @@ const getController = (offerStore, imageStore) => {
       throw new NotFoundError(`Offer with date "${offersDate}" not found`);
     }
 
+    res.status(200);
     res.send(foundOffer);
   };
 
@@ -100,19 +108,18 @@ const getController = (offerStore, imageStore) => {
       throw new NotFoundError(`Offer with date "${offersDate}" not found`);
     }
 
-    const avatar = foundOffer.avatar;
-
+    const avatar = foundOffer.author.avatar;
     if (!avatar) {
       throw new NotFoundError(`Offer with date "${offersDate}" does not have avatar`);
     }
 
-    const {info, stream} = await imageStore.get(avatar.path);
+    const {info, stream} = await imageStore.get(avatar);
 
     if (!info) {
       throw new NotFoundError(`File was not found`);
     }
 
-    res.set(`content-type`, avatar.mimetype);
+    res.set(`content-type`, info.contentType);
     res.set(`content-length`, info.length);
     res.status(200);
     stream.pipe(res);

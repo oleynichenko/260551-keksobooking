@@ -1,6 +1,6 @@
 const assert = require(`assert`);
-const {TYPES, FEATURES, Price, Rooms} = require(`../../src/server/util/const`);
-const {PLACES, TIME, PHOTOS, Guests, Location} = require(`./offers-data`);
+const {TYPES, FEATURES, Price, Rooms, Guests} = require(`../../src/server/util/const`);
+const {PLACES, TIME, PHOTOS, Location} = require(`./offers-data`);
 const {generateOffers} = require(`./offers-generator`);
 
 const data = generateOffers();
@@ -44,7 +44,7 @@ describe(`Random offer from generated data should match the data model`, () => {
     });
 
     it(`"guests" should be between ${Guests.MIN} and ${Guests.MAX}`, () => {
-      assert.ok(offer.guests >= Guests.MIN && offer.guests <= Guests.MAX);
+      assert.ok(offer.capacity >= Guests.MIN && offer.capacity <= Guests.MAX);
     });
 
     it(`"checkin" should be one of TIME data`, () => {

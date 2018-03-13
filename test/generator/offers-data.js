@@ -21,11 +21,6 @@ const PHOTOS = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
 
-const Guests = {
-  MIN: 1,
-  MAX: 50
-};
-
 const Location = {
   X_MIN: 300,
   X_MAX: 900,
@@ -39,7 +34,6 @@ module.exports = {
   PLACES,
   TIME,
   PHOTOS,
-  Guests,
   Location,
   INITIAL_DATE
 };

@@ -1,5 +1,7 @@
 const readline = require(`readline`);
 
+const hostname = process.env.SERVER_HOST || `localhost`;
+
 const Port = {
   MIN: 1024,
   MAX: 49151,
@@ -39,5 +41,5 @@ const setPort = async () => {
 
 module.exports = {
   setPort,
-  hostname: process.env.SERVER_HOST || `localhost`
+  hostname
 };

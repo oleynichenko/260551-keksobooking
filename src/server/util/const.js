@@ -1,6 +1,21 @@
+const NAMES = [
+  `Keks`,
+  `Pavel`,
+  `Nikolay`,
+  `Alex`,
+  `Ulyana`,
+  `Anastasyia`,
+  `Julia`
+];
+
 const OffersQuery = {
   SKIP: 0,
   LIMIT: 20
+};
+
+const Guests = {
+  MIN: 0,
+  MAX: 50
 };
 
 const TYPES = [
@@ -37,7 +52,9 @@ const TitleLength = {
 const ADDRESS_LENGTH = 100;
 
 module.exports = {
+  NAMES,
   TYPES,
+  Guests,
   FEATURES,
   Price,
   Rooms,

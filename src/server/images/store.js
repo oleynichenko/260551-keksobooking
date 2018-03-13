@@ -1,5 +1,5 @@
-const getConnection = require(`../../database`);
 const mongodb = require(`mongodb`);
+const {getConnection} = require(`../../database`);
 
 class ImageStore {
   async getBucket() {
@@ -30,11 +30,11 @@ class ImageStore {
     return {info: entity, stream: bucket.openDownloadStreamByName(filename)};
   }
 
-  async save(filename, stream) {
+  async save(filename, contentType, stream) {
     const bucket = await this.getBucket();
 
     return new Promise((success, fail) => {
-      stream.pipe(bucket.openUploadStream(filename)).on(`error`, fail).on(`finish`, success);
+      stream.pipe(bucket.openUploadStream(filename, {contentType})).on(`error`, fail).on(`finish`, success);
     });
   }
 }
